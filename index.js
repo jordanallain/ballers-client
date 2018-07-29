@@ -1,14 +1,22 @@
 const store = {}
 
-const onGetPlayers = function () {
-  fetch('http://localhost:4741', {
-    method: 'GET',
-    mode: 'no-cors',
-    headers: {
-      'Content-Type': 'application/json; charset=utf-8'
-    }
+const displayPlayers = function (players) {
+  store.players = players.cumulativeplayerstats.playerstatsentry
+  console.log(store.players)
+  store.players.forEach((playerObj) => {
+    const playerDiv = document.createElement('div')
+    playerDiv.classList.add('player-div')
+    playerDiv.innerHTML = `${playerObj.player.FirstName} ${playerObj.player.LastName}`
+    document.getElementById('container').appendChild(playerDiv)
   })
-    .then(console.log)
+}
+
+const onGetPlayers = function () {
+  fetch('http://localhost:4741/players')
+    .then((res) => {
+      return res.json()
+    })
+    .then(displayPlayers)
     .catch(console.error)
 }
 
